@@ -1,0 +1,51 @@
+in eclipse maven comes default
+so u can use it directly with now mvn installed in your system
+
+maven folder structure:
+by default maven gives u some folders
+ResourceBundle eb=ResourceBunble.getBundle("file");
+
+how to execute maven project
+while executing maven project we need to follow certain set of rules
+
+mvn build life cycle:
+----------------------------------------------------------------------------------
+validate all files
+compile
+testing
+package
+integration testing
+verify
+install
+deploy
+-----------------------------------------------------------------------------------
+how to run the maven project
+right click on pom.xml
+run as > <required option> 
+i.e if u wanna test use maven test
+but before u use that phase all the previous life cycles will be done
+
+run as > maven build
+then it will ask for goal
+give clean => this will clean the project
+give compile => this will compile the project
+here u might get some error u need to configure JDK rather than JRE
+window>preferences>java>installed jre's>"here add >standard vm>in jre home give jdk path"
+
+give install =>it will do all previous phases and create a jar in target folder
+give test => it will run all the test cases
+u can also give two commands at the same time
+give clean test
+---------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,216 @@
+<properties>
+		<maven.compiler.target>11</maven.compiler.target>
+		<maven.compiler.source>11</maven.compiler.source>
+		<junit.jupiter.version>5.4.0</junit.jupiter.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>${junit.jupiter.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>${junit.jupiter.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	
+----------------------------------------------------------------------------
+
+u need to annotate the method with @Test
+
+then u can use the 
+
+assertEquals(expected,actual)
+
+assertArrayEquals(expectedArray,actualArray)
+
+assertIterableEquals(expectedArray,actualArray)
+
+assertFalse()
+
+
+https://junit.org/junit5/docs/current/api/org.junit.jupiter.api/org/junit/jupiter/api/package-summary.html
+
+assertEquals(expected,actual,string(message))
+
+
+---------------------------------------------------------------------------
+test driven methodology:
+
+here first we need to write the test case 
+@Test
+void testComputeRadius(){
+	create object to class
+	call method(assertEquals(e,a,"message"))
+}
+now write the method in actual class
+
+-----------------------------------------------------------------------------
+
+we can run these test from eclipse bt when it comes to cicd(cli) pipeline we cant run them
+so we need to take the help of maven (for that we need to add plugins)
+
+in pom.xml
+
+<build>
+	<plugins>
+		<plugin>
+			<artifactId>maven-surefire-plugin<\artifactId>
+			<version>2.22.1</version>
+		</plugin>
+	</plugins>
+</build>
+
+now in run configuration
+u need to select maven build
+and keep the goal as test 
+run
+
+this is exactly same as run from gui
+bt we can use it in cli as well in jenkin builds.
+------------------------------------------------------------------------------------
+
+asserting exceptions with assertThrows
+
+asserThrows(ArithmaticException.class,method{()->mathUtils.divide(1,0)},"message")
+
+--------------------------------------------------------------------------------------
+test life cycle(or)life cycle hooks
+
+@BeforeAll initialize before anything in this class runs
+static void{
+	//this should be static because it should run before all even without instance
+}
+
+@BeforeEach initialize before each method
+{
+	mathUtils=new MathUtils();
+}
+
+
+@AfterEach  teardown after each method
+{
+	sop("this is after each method");
+}
+
+
+teardown after all methods are done
+
+----------------------------------------------------------------------------------
+changing the default TestInstanceBehaviour
+@TestInsatance(TestInstance.LifeCycle.PER_CLASS)
+it will create an instance once and use it for every method
+
+----------------------------------------------------------------------------------
+@DisplayName("Testing add method")
+this will display the name on the JUnitConsole
+
+
+@Disabled
+this will disable the test(this will skip the test)
+void testDisabled(){
+	fail("this will fail");//this will fail your test
+}
+
+------------------------------------------------------------------------------------
+
+@EnableOnOs(OS.LINUX)
+@EnableOnJre(JRE.JAVA_11)
+@EnableIf
+@EnableIfSystemProperty
+@EnableIfEnvironmentVariable
+
+--------------------------------------------------------------------------------
+handling external factors
+
+boolean isServerUp=false
+assumeTrue(<boolean>) if this is true then it will test other wise
+
+-----------------------------------------------------------------------------------
+assertAll()
+this will basically take all the methods that are having assertEquals
+so we use lambda expressions
+
+assertAll(
+	()->assertEquals(4,mathUtils.multiply(2,2)),
+	()->assertEquals(0,mathUtils.multiply(2,0)),
+	()->assertEquals(-2,mathUtils.multiply(2,-1))
+);
+
+-----------------------------------------------------------------------------
+writting nested test classes (22)
+@DisplayName("when using mathUtils class")
+class MathUtils{
+	@Nested
+	@DisplayName("doing add test class")
+	class AddTest{
+		@Test
+		@DisplayName("passing two positive numbers")
+		void testAddPositive(){
+			assertEquals(-2,mathUtils.add(-1,-1),"should result in rignt sum")
+		}
+		@Test
+		@DisplayName()
+		         
+	}
+}
+
+------------------------------------------------------------------------------
+supplier for assert messages
+
+in assertEquals method the message is passed and the message will only work when the test is failed bt then why we need to pass the string and variables in string?
+
+so for that we need to do lazy avaluation
+that means we need to send the method so that when the test fails
+
+assertEquals(expected,actual,()->"message")
+-------------------------------------------------------------------------------------
+RepeatedTest:
+
+@RepeatedTest(3)
+void testComputerRadius(RepetitionInfo repetitionInfo){
+	//repetitionInfo object has some powers like getinfo,getrepetation count
+	assertEquals(expected,actual,message);
+}
+--------------------------------------------------------------------------------------
+maven surefire-plugin is needed for this
+@Tag
+if u want to create a custom runner then u can make use of @tag 
+
+basically u will add methods with tag
+and u need to configure the tag in run configuration
+
+so that particular tag will run when u run.
+
+------------------------------------------------------------------------------------
+testInfo and testReporter
+
+testinfo will give u the information of the test
+
+and testreporter will publish the entry out to the console
+
+eg:
+testReporter.publishEntry("Running "+testInfo.getDisplayName())
+-------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
